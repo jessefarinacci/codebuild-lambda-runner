@@ -1,0 +1,8 @@
+# https://github.com/hadolint/hadolint?tab=readme-ov-file#configure
+
+ignored:
+  - DL3007
+  - DL3008
+
+trustedRegistries:
+  - public.ecr.aws

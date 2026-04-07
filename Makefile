@@ -1,12 +1,14 @@
-ACC := $(aws sts get-caller-identity | jq --raw-output '.Account')
+.NOTPARALLEL:
+
+ACC := $(shell aws sts get-caller-identity | jq --raw-output '.Account')
 REG := $(ACC).dkr.ecr.us-east-1.amazonaws.com
 REP := 00000000-0000-0000-0000-000000000000
 TAG := codebuild-lambda-runner-multitool-arm64
 
-all: build
+all: build tag
 	@true
 
-build:
+build: test
 	@echo ">> $(@)"
 	@docker build --file Dockerfile --progress=plain --tag $(TAG) .
 
