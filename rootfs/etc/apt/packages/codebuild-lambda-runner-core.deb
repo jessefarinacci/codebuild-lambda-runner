@@ -1,9 +1,0 @@
-Architecture: all
-Depends: acl, apt-utils, aria2, bash-completion, bison, build-essential, brotli, bzip2, coreutils, curl, file, gettext, gnu-coreutils, groff, gzip, haveged, jq, less, lz4, make, net-tools, openssh-client, openssl, parallel, patch, pkg-config, rsync, sed, software-properties-common, sudo, tar, tree, time, tzdata, wget, xz-utils, zip
-Description: Meta package for Codebuild Lambda Runner
-Package: codebuild-lambda-runner-core
-Priority: optional
-Recommends:
-Section: misc
-Standards-Version: 3.9.2
-Version: 1.0

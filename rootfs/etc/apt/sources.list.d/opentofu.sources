@@ -1,5 +1,0 @@
-Types: deb
-Suites: any
-Components: main
-URIs: https://packages.opentofu.org/opentofu/tofu/any/
-Signed-By: /etc/apt/keyrings/opentofu.gpg,/etc/apt/keyrings/opentofu-repo.gpg
