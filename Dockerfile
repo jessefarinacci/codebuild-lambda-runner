@@ -201,8 +201,8 @@ RUN set -ex \
   && mkdir -p /home/ubuntu/.npm \
   && chmod 755 /home \
   && chown -R ubuntu:ubuntu /home/ubuntu \
-  && find /home/ubuntu -type d -exec chmod 700 {} \; \
-  && find /home/ubuntu -type f -exec chmod 600 {} \; \
+  && find /home/ubuntu -type d -exec chmod 777 {} \; \
+  && find /home/ubuntu -type f -exec chmod 666 {} \; \
   && echo 'ubuntu ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu \
   # && echo "brew extras" \
   # && brew install --verbose \
@@ -224,8 +224,8 @@ RUN set -ex \
   && rm -rf /usr/share/man \
   && rm -rf /var/lib/apt/lists \
   && chown -R ubuntu:ubuntu /home/ubuntu \
-  && find /home/ubuntu -type d -exec chmod 700 {} \; \
-  && find /home/ubuntu -type f -exec chmod 600 {} \; \
+  && find /home/ubuntu -type d -exec chmod 777 {} \; \
+  && find /home/ubuntu -type f -exec chmod 666 {} \; \
   && echo "all done!"
 
 ENV KICS_LIBRARIES_PATH=/home/linuxbrew/.linuxbrew/share/kics/assets/libraries
