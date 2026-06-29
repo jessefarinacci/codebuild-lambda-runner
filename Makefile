@@ -1,65 +1,59 @@
 .NOTPARALLEL:
 
-ACC := $(shell aws sts get-caller-identity | jq --raw-output '.Account')
-REG := $(ACC).dkr.ecr.us-east-1.amazonaws.com
-REP := 00000000-0000-0000-0000-000000000000
-TAG := codebuild-lambda-runner
+COMMIT   :=  $(shell git rev-parse HEAD)
+REPO     :=  $(shell aws ssm get-parameter --name '/iac/system/codebuild/share/ecr/repository/uri' --output text --query 'Parameter.Value' --output text --with-decryption)
+REPONAME :=  $(shell echo $(REPO) | cut -d '/' -f 2)
+NAME     :=  codebuild-lambda-runner
 
 all: build tag
 	@true
 
-# build: build-amd64
 build: build-arm64
 build:
 	@true
 
-# build-amd64: test
-# build-amd64:
-# 	@echo ">> $(@)"
-# 	@podman build --platform linux/amd64 --progress plain --tag $(TAG)-amd64 .
-
 build-arm64: test
 build-arm64:
 	@echo ">> $(@)"
-	@podman build --platform linux/arm64 --progress plain --tag $(TAG)-arm64 .
+	@podman build --platform linux/arm64 --progress plain --tag $(NAME)-arm64 .
 
 login:
 	@echo ">> $(@)"
-	@aws ecr get-login-password | podman login --username AWS --password-stdin $(REG)/$(REP)
+	@aws ecr get-login-password | podman login --username AWS --password-stdin $(REPO)
 
-# push: push-amd64
 push: push-arm64
 push:
 	@true
 
-# push-amd64: tag-amd64
-# push-amd64:
-# 	@echo ">> $(@)"
-# 	@podman push $(REG)/$(REP):$(TAG)-amd64
-
 push-arm64: tag-arm64
+push-arm64: untag
 push-arm64:
 	@echo ">> $(@)"
-	@podman push $(REG)/$(REP):$(TAG)-arm64
+	@podman push $(REPO):$(COMMIT)-arm64
+	@podman push $(REPO):$(NAME)-arm64
 
 run: run-arm64
 run-arm64:
 	@echo ">> $(@)"
-	@podman run --interactive --platform linux/arm64 --tty $(TAG)-arm64 bash
+	@podman run --interactive --platform linux/arm64 --tty $(NAME)-arm64 bash
 
-# tag: tag-amd64
 tag: tag-arm64
 tag:
 	@true
 
-# tag-amd64: build-amd64
-# 	@echo ">> $(@)"
-# 	@podman tag $(TAG)-amd64 $(REG)/$(REP):$(TAG)-amd64
-
 tag-arm64: build-arm64
 	@echo ">> $(@)"
-	@podman tag $(TAG)-arm64 $(REG)/$(REP):$(TAG)-arm64
+	@podman tag $(NAME)-arm64 $(REPO):$(NAME)-arm64
+	@podman tag $(NAME)-arm64 $(REPO):$(COMMIT)-arm64
 
 test:
 	@echo ">> $(@)"
-	@-hadolint Dockerfile
+	@hadolint --failure-threshold warning Dockerfile
+
+untag: untag-arm64
+untag:
+	@true
+
+untag-arm64:
+	@echo ">> $(@)"
+	@aws ecr batch-delete-images --repository-name $(REPONAME) --image-ids imageTag=$(NAME)-arm64

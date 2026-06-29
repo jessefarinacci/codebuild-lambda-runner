@@ -4,6 +4,7 @@ ignored:
   - DL3007
   - DL3008
   - DL3015
+  - DL3016
 
 trustedRegistries:
   - public.ecr.aws

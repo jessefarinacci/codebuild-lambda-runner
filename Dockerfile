@@ -136,6 +136,7 @@ RUN set -ex \
   awscli \
   checkov \
   # composer \
+  detect-secrets \
   # docker-credential-helper-ecr \
   # dotnet \
   exiftool \
@@ -196,10 +197,9 @@ RUN set -ex \
   && echo "install extras" \
   && mkdir -p /home/ubuntu/.cache/opentofu/plugin-cache \
   && mkdir -p /home/ubuntu/.config/opentofu \
+  && mkdir -p /home/ubuntu/.npm \
   && echo 'plugin_cache_dir = "$XDG_CACHE_HOME/opentofu/plugin-cache"' > /home/ubuntu/.config/opentofu/tofurc \
-  && chown -R ubuntu:ubuntu /home/ubuntu \
-  && find /home/ubuntu -type d -exec chmod 700 {} \; \
-  && find /home/ubuntu -type f -exec chmod 600 {} \; \
+  && echo 'ubuntu ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu \
   # && brew install --verbose \
   # fixme \
   && npm install --global \
@@ -215,6 +215,9 @@ RUN set -ex \
   && rm -rf /usr/share/doc \
   && rm -rf /usr/share/man \
   && rm -rf /var/lib/apt/lists \
+  && chown -R ubuntu:ubuntu /home/ubuntu \
+  && find /home/ubuntu -type d -exec chmod 700 {} \; \
+  && find /home/ubuntu -type f -exec chmod 600 {} \; \
   && echo "all done!"
 
 ENV KICS_LIBRARIES_PATH=/home/linuxbrew/.linuxbrew/share/kics/assets/libraries
