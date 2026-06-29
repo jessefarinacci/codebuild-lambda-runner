@@ -16,7 +16,7 @@ RUN set -ex \
   && echo "installing system" \
   && apt-get install --assume-yes \
   acl \
-  amazon-ecr-credential-helper \
+  # amazon-ecr-credential-helper \
   # ant \
   apt-file \
   apt-utils \
@@ -37,12 +37,12 @@ RUN set -ex \
   # docker-compose-v2 \
   # docker.io \
   # dotnet-sdk-10.0 \
-  eza \
-  fd-find \
+  # eza \
+  # fd-find \
   # ffmpeg \
   file \
   # firefox \
-  fzf \
+  # fzf \
   gcc \
   gettext \
   git \
@@ -59,7 +59,7 @@ RUN set -ex \
   # hunspell \
   # hunspell-en-us \
   # imagemagick \
-  jq \
+  # jq \
   less \
   # lua5.5 \
   # luarocks \
@@ -67,8 +67,6 @@ RUN set -ex \
   m4 \
   make \
   # maven \
-  nano \
-  neovim \
   net-tools \
   # node-corepack \
   # nodejs \
@@ -76,7 +74,7 @@ RUN set -ex \
   # openjdk-26-jdk \
   # openssh-client \
   openssl \
-  oras \
+  # oras \
   patch \
   # perl \
   # php \
@@ -97,15 +95,15 @@ RUN set -ex \
   tar \
   # tcl9.0 \
   # tcl9.0-dev \
+  tcsh \
   # testssl.sh \
   time \
   # tk9.0 \
   tree \
   tzdata \
-  vim \
   # webpack \
   wget \
-  xvfb \
+  # xvfb \
   xz-utils \
   # yarnpkg \
   zip \
@@ -137,9 +135,10 @@ RUN set -ex \
   checkov \
   # composer \
   detect-secrets \
-  # docker-credential-helper-ecr \
+  docker-credential-helper-ecr \
   # dotnet \
   exiftool \
+  eza \
   fd \
   # firefox \
   # ffmpeg-full \
@@ -159,20 +158,20 @@ RUN set -ex \
   # lua \
   # luarocks \
   # maven \
-  # neovim \
   node \
   npm \
+  opa \
   # openjdk \
   opentofu \
   oras \
   # perl \
   # php \
-  # podman \
-  # podman-compose \
+  podman \
+  podman-compose \
   python \
   # ruby \
   # rust \
-  # rsync \
+  rsync \
   # stylua \
   # tcl-tk \
   terraform-docs \
@@ -193,19 +192,28 @@ RUN set -ex \
   && rm -rf /var/lib/apt/lists \
   && echo "all done!"
 
+COPY rootfs /
+
 RUN set -ex \
   && echo "install extras" \
   && mkdir -p /home/ubuntu/.cache/opentofu/plugin-cache \
   && mkdir -p /home/ubuntu/.config/opentofu \
   && mkdir -p /home/ubuntu/.npm \
-  && echo 'plugin_cache_dir = "$XDG_CACHE_HOME/opentofu/plugin-cache"' > /home/ubuntu/.config/opentofu/tofurc \
+  && chmod 755 /home \
+  && chown -R ubuntu:ubuntu /home/ubuntu \
+  && find /home/ubuntu -type d -exec chmod 700 {} \; \
+  && find /home/ubuntu -type f -exec chmod 600 {} \; \
   && echo 'ubuntu ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu \
+  # && echo "brew extras" \
   # && brew install --verbose \
   # fixme \
+  && echo "npm extras" \
   && npm install --global \
   @lhci/cli \
   html-validate \
   npm-check-updates \
+  && echo "tofu extras" \
+  && tofu -chdir=/home/ubuntu init \
   && echo "clean up" \
   && apt-get clean \
   && brew cleanup --scrub --verbose \
@@ -229,3 +237,5 @@ ENV XDG_CACHE_HOME="/home/ubuntu/.cache"
 ENV XDG_CONFIG_HOME="/home/ubuntu/.config"
 ENV XDG_DATA_HOME="/home/ubuntu/.local/share"
 ENV XDG_STATE_HOME="/home/ubuntu/.local/state"
+WORKDIR /home/ubuntu
+

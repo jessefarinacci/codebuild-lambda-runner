@@ -43,8 +43,8 @@ tag:
 
 tag-arm64: build-arm64
 	@echo ">> $(@)"
-	@podman tag $(NAME)-arm64 $(REPO):$(NAME)-arm64
 	@podman tag $(NAME)-arm64 $(REPO):$(COMMIT)-arm64
+	@podman tag $(NAME)-arm64 $(REPO):$(NAME)-arm64
 
 test:
 	@echo ">> $(@)"
@@ -56,4 +56,5 @@ untag:
 
 untag-arm64:
 	@echo ">> $(@)"
-	@aws ecr batch-delete-images --repository-name $(REPONAME) --image-ids imageTag=$(NAME)-arm64
+	@-aws ecr batch-delete-image --image-ids imageTag=$(NAME)-arm64 --output json --region us-east-1 --repository-name $(REPONAME)
+	@-aws ecr batch-delete-image --image-ids imageTag=$(NAME)-arm64 --output json --region us-west-2 --repository-name $(REPONAME)
