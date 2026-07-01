@@ -168,6 +168,7 @@ RUN set -ex \
   # php \
   podman \
   podman-compose \
+  prettier \
   python \
   # ruby \
   # rust \
