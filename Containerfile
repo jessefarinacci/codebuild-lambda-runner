@@ -3,10 +3,10 @@ FROM public.ecr.aws/docker/library/ubuntu:26.04
 ARG DEBIAN_FRONTEND="noninteractive"
 
 ENV PATH="/home/linuxbrew/.linuxbrew/sbin:/home/linuxbrew/.linuxbrew/bin:$PATH"
-ENV TF_PLUGIN_CACHE_DIR="/home/ubuntu/.cache/opentofu/plugin-cache"
+# FIXME: # ENV TF_PLUGIN_CACHE_DIR="/home/ubuntu/.cache/opentofu/plugin-cache"
 
 COPY rootfs/opt/extras/homebrew/install.sh /opt/extras/homebrew/install.sh
-COPY rootfs/opt/extras/opentofu/main.tf /opt/extras/opentofu/main.tf
+# FIXME: # COPY rootfs/opt/extras/opentofu/main.tf /opt/extras/opentofu/main.tf
 
 # apt-get --option Debug::pkgAcquire::Worker=1 install
 # brew install --verbose
@@ -169,11 +169,10 @@ RUN \
   --mount=type=cache,target=/var/lib/apt \
   set -ex \
   && echo "install non-priviliged user" \
-  # && useradd --create-home ubuntu \
-  && mkdir -p /root/.config/opentofu \
-  && mkdir -p /home/ubuntu/.config/opentofu \
-  && echo 'plugin_cache_dir = "/home/ubuntu/.cache/opentofu/plugin-cache"' > /root/.config/opentofu/tofurc \
-  && echo 'plugin_cache_dir = "/home/ubuntu/.cache/opentofu/plugin-cache"' > /home/ubuntu/.config/opentofu/tofurc \
+  # FIXME: # && mkdir -p /root/.config/opentofu \
+  # FIXME: # && mkdir -p /home/ubuntu/.config/opentofu \
+  # FIXME: # && echo 'plugin_cache_dir = "/home/ubuntu/.cache/opentofu/plugin-cache"' > /root/.config/opentofu/tofurc \
+  # FIXME: # && echo 'plugin_cache_dir = "/home/ubuntu/.cache/opentofu/plugin-cache"' > /home/ubuntu/.config/opentofu/tofurc \
   && echo 'export PATH="/home/linuxbrew/.linuxbrew/sbin:/home/linuxbrew/.linuxbrew/bin:$PATH"' >> /root/.bashrc \
   && echo 'export PATH="/home/linuxbrew/.linuxbrew/sbin:/home/linuxbrew/.linuxbrew/bin:$PATH"' >> /home/ubuntu/.bashrc \
   && echo 'ubuntu ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu \
@@ -188,9 +187,9 @@ RUN \
   mocha \
   npm-check-updates \
   pagefind \
-  && echo "install tofu extras" \
-  && tofu -chdir=/opt/extras/opentofu init \
-  && tofu -chdir=/opt/extras/opentofu version \
+  # FIXME: # && echo "install tofu extras" \
+  # FIXME: # && tofu -chdir=/opt/extras/opentofu init \
+  # FIXME: # && tofu -chdir=/opt/extras/opentofu version \
   && echo "clean up" \
   && apt-get clean \
   && brew cleanup --scrub \
