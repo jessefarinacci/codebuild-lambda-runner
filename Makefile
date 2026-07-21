@@ -21,7 +21,8 @@ build:
 build-arm64: test
 build-arm64:
 	@echo ">> $(@)"
-	@podman build --cache-from $(REPO) --cache-to $(REPO) --layers --platform linux/arm64 --progress plain --tag $(NAME)-arm64 .
+	@podman build --cache-from $(REPO) --layers --platform linux/arm64 --progress plain --tag $(NAME)-arm64 .
+# @podman build --cache-from $(REPO) --cache-to $(REPO) --layers --platform linux/arm64 --progress plain --tag $(NAME)-arm64 .
 
 .PHONY: login
 login:

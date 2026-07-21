@@ -3,7 +3,7 @@ FROM public.ecr.aws/docker/library/ubuntu:26.04
 ARG DEBIAN_FRONTEND="noninteractive"
 
 ENV PATH="/home/linuxbrew/.linuxbrew/sbin:/home/linuxbrew/.linuxbrew/bin:$PATH"
-ENV TF_PLUGIN_CACHE_DIR="/tmp/opentofu/plugin-cache"
+ENV TF_PLUGIN_CACHE_DIR="/home/ubuntu/.cache/opentofu/plugin-cache"
 
 COPY rootfs/opt/extras/homebrew/install.sh /opt/extras/homebrew/install.sh
 COPY rootfs/opt/extras/opentofu/main.tf /opt/extras/opentofu/main.tf
@@ -108,6 +108,7 @@ RUN \
   zip \
   zsh \
   && echo "clean up" \
+  && ln -s /usr/bin/fdfind /usr/bin/fd \
   && apt-get clean \
   && rm -rf /home/linuxbrew/.linuxbrew/share/doc \
   && rm -rf /home/linuxbrew/.linuxbrew/share/man \
@@ -126,6 +127,7 @@ RUN \
   && echo "install brew packages" \
   && brew install \
   checkov \
+  cosign \
   detect-secrets \
   dua-cli \
   exiftool \
@@ -135,6 +137,7 @@ RUN \
   # golang \
   golangci-lint \
   # gradle \
+  grype \
   hadolint \
   hugo \
   # imagemagick-full \
@@ -144,6 +147,7 @@ RUN \
   opentofu \
   prettier \
   stylua \
+  syft \
   terraform-docs \
   terraform-linters/tap/tflint \
   tfsec \
@@ -152,6 +156,7 @@ RUN \
   # webpack \
   && echo "clean up" \
   && apt-get clean \
+  && brew cleanup --scrub \
   && rm -rf /home/linuxbrew/.linuxbrew/share/doc \
   && rm -rf /home/linuxbrew/.linuxbrew/share/man \
   && rm -rf /usr/share/doc \
@@ -165,8 +170,11 @@ RUN \
   set -ex \
   && echo "install non-priviliged user" \
   # && useradd --create-home ubuntu \
+  && mkdir -p /root/.config/opentofu \
   && mkdir -p /home/ubuntu/.config/opentofu \
-  && echo 'plugin_cache_dir = "/tmp/opentofu/plugin-cache"' > /home/ubuntu/.config/opentofu/tofurc \
+  && echo 'plugin_cache_dir = "/home/ubuntu/.cache/opentofu/plugin-cache"' > /root/.config/opentofu/tofurc \
+  && echo 'plugin_cache_dir = "/home/ubuntu/.cache/opentofu/plugin-cache"' > /home/ubuntu/.config/opentofu/tofurc \
+  && echo 'export PATH="/home/linuxbrew/.linuxbrew/sbin:/home/linuxbrew/.linuxbrew/bin:$PATH"' >> /root/.bashrc \
   && echo 'export PATH="/home/linuxbrew/.linuxbrew/sbin:/home/linuxbrew/.linuxbrew/bin:$PATH"' >> /home/ubuntu/.bashrc \
   && echo 'ubuntu ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu \
   # && echo "brew extras" \
@@ -185,26 +193,25 @@ RUN \
   && tofu -chdir=/opt/extras/opentofu version \
   && echo "clean up" \
   && apt-get clean \
+  && brew cleanup --scrub \
+  && rm -rf /home/linuxbrew/.linuxbrew/share/doc \
   && rm -rf /home/linuxbrew/.linuxbrew/share/man \
   && rm -rf /usr/share/doc \
   && rm -rf /usr/share/man \
   && chmod 755 /home \
   && chown -R ubuntu:ubuntu /home/ubuntu \
-  && chown -R ubuntu:ubuntu /tmp \
   && find /home/ubuntu -type d -exec chmod 777 {} \; \
   && find /home/ubuntu -type f -exec chmod 666 {} \; \
-  && find /tmp/opentofu -type d -exec chmod 777 {} \; \
-  && find /tmp/opentofu -type f -exec chmod 666 {} \; \
   && echo "all done!"
 
 ENV KICS_LIBRARIES_PATH=/home/linuxbrew/.linuxbrew/share/kics/assets/libraries
 ENV KICS_QUERIES_PATH=/home/linuxbrew/.linuxbrew/share/kics/assets/queries
 
 USER ubuntu
-ENV HOME=/tmp
+ENV HOME=/home/ubuntu
 ENV XDG_CACHE_HOME="/tmp/.cache"
 ENV XDG_CONFIG_HOME="/home/ubuntu/.config"
 ENV XDG_DATA_HOME="/tmp/.local/share"
 ENV XDG_STATE_HOME="/tmp/.local/state"
-WORKDIR /tmp
+WORKDIR /home/ubuntu
 
