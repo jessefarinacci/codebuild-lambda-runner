@@ -7,22 +7,17 @@ REPONAME :=  $(shell echo $(REPO) | cut -d '/' -f 2)
 NAME     :=  codebuild-lambda-runner
 
 .PHONY: all
-all: build tag
+all: build
 	@echo ">> $(@)"
-	@true
 
 .PHONY: build
 build: build-arm64
-build:
 	@echo ">> $(@)"
-	@true
 
 .PHONY: build-arm64
 build-arm64: test
-build-arm64:
 	@echo ">> $(@)"
 	@podman build --cache-from $(REPO) --layers --platform linux/arm64 --progress plain --tag $(NAME)-arm64 .
-# @podman build --cache-from $(REPO) --cache-to $(REPO) --layers --platform linux/arm64 --progress plain --tag $(NAME)-arm64 .
 
 .PHONY: login
 login:
@@ -31,9 +26,7 @@ login:
 
 .PHONY: push
 push: push-arm64
-push:
 	@echo ">> $(@)"
-	@true
 
 .PHONY: push-arm64
 push-arm64: tag-arm64
@@ -46,9 +39,7 @@ push-arm64:
 
 .PHONY: run
 run: run-arm64
-run:
 	@echo ">> $(@)"
-	@true
 
 .PHONY: run-arm64
 run-arm64:
@@ -57,13 +48,10 @@ run-arm64:
 
 .PHONY: tag
 tag: tag-arm64
-tag:
 	@echo ">> $(@)"
-	@true
 
 .PHONY: tag-arm64
 tag-arm64: build-arm64
-tag-arm64:
 	@echo ">> $(@)"
 	@podman tag $(NAME)-arm64 $(REPO):$(COMMIT)-arm64
 	@podman tag $(NAME)-arm64 $(REPO):$(DATE)-arm64
@@ -76,9 +64,7 @@ test:
 
 .PHONY: untag
 untag: untag-arm64
-untag:
 	@echo ">> $(@)"
-	@true
 
 .PHONY: untag-arm64
 untag-arm64:
@@ -89,7 +75,7 @@ untag-arm64:
 .PHONY: xx-install-homebrew
 xx-install-homebrew:
 	@echo ">> $(@)"
-	curl \
+	@curl \
 		--fail \
 		--location 'https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh' \
 		--output 'rootfs/opt/extras/homebrew/install.sh' \
