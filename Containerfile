@@ -207,7 +207,8 @@ ENV KICS_LIBRARIES_PATH=/home/linuxbrew/.linuxbrew/share/kics/assets/libraries
 ENV KICS_QUERIES_PATH=/home/linuxbrew/.linuxbrew/share/kics/assets/queries
 
 USER ubuntu
-ENV HOME=/home/ubuntu
+ENV DOCKER_CONFIG="/tmp/.local/docker"
+ENV HOME="/home/ubuntu"
 ENV XDG_CACHE_HOME="/tmp/.cache"
 ENV XDG_CONFIG_HOME="/home/ubuntu/.config"
 ENV XDG_DATA_HOME="/tmp/.local/share"
