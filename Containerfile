@@ -41,6 +41,7 @@ RUN \
   ca-certificates-java \
   cargo \
   coreutils \
+  cosign \
   curl \
   docker-compose-v2 \
   docker.io \
@@ -48,7 +49,7 @@ RUN \
   fd-find \
   ffmpeg \
   file \
-  # firefox \
+  firefox \
   fzf \
   gcc \
   gettext \
@@ -101,7 +102,7 @@ RUN \
   time \
   tree \
   tzdata \
-  # webpack \
+  webpack \
   wget \
   xvfb \
   xz-utils \
@@ -127,20 +128,15 @@ RUN \
   && echo "install brew packages" \
   && brew install \
   checkov \
-  cosign \
   detect-secrets \
   dua-cli \
   exiftool \
-  # firefox \
-  # ffmpeg-full \
   # git-remote-codecommit \
   # golang \
   golangci-lint \
-  # gradle \
   grype \
   hadolint \
   hugo \
-  # imagemagick-full \
   kics \
   license-eye \
   opa \
@@ -151,9 +147,9 @@ RUN \
   terraform-docs \
   terraform-linters/tap/tflint \
   tfsec \
+  totp-cli \
   trivy \
   # uv \
-  # webpack \
   && echo "clean up" \
   && apt-get clean \
   && brew cleanup --scrub \
