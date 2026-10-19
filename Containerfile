@@ -7,6 +7,7 @@ ENV PATH="/home/linuxbrew/.linuxbrew/sbin:/home/linuxbrew/.linuxbrew/bin:$PATH"
 
 COPY rootfs/opt/extras/homebrew/install.sh /opt/extras/homebrew/install.sh
 # FIXME: # COPY rootfs/opt/extras/opentofu/main.tf /opt/extras/opentofu/main.tf
+COPY rootfs/opt/extras/tflint/tflint.hcl /opt/extras/tflint/tflint.hcl
 
 # apt-get --option Debug::pkgAcquire::Worker=1 install
 # brew install --verbose
@@ -75,6 +76,7 @@ RUN \
   m4 \
   make \
   maven \
+  neovim \
   net-tools \
   node-corepack \
   nodejs \
@@ -172,6 +174,9 @@ RUN \
   && echo 'export PATH="/home/linuxbrew/.linuxbrew/sbin:/home/linuxbrew/.linuxbrew/bin:$PATH"' >> /root/.bashrc \
   && echo 'export PATH="/home/linuxbrew/.linuxbrew/sbin:/home/linuxbrew/.linuxbrew/bin:$PATH"' >> /home/ubuntu/.bashrc \
   && echo 'ubuntu ALL=(ALL:ALL) NOPASSWD:ALL' > /etc/sudoers.d/ubuntu \
+  && echo "install tflint extras" \
+  && tflint --config=/opt/extras/tflint/tflint.hcl --init \
+  && tflint --config=/opt/extras/tflint/tflint.hcl --version \
   # && echo "brew extras" \
   # && brew install --verbose \
   # FIXME \
@@ -197,6 +202,7 @@ RUN \
   && chown -R ubuntu:ubuntu /home/ubuntu \
   && find /home/ubuntu -type d -exec chmod 777 {} \; \
   && find /home/ubuntu -type f -exec chmod 666 {} \; \
+  && find /home/ubuntu/.tflint.d -type f -exec chmod 777 {} \; \
   && echo "all done!"
 
 ENV KICS_LIBRARIES_PATH=/home/linuxbrew/.linuxbrew/share/kics/assets/libraries
@@ -205,6 +211,7 @@ ENV KICS_QUERIES_PATH=/home/linuxbrew/.linuxbrew/share/kics/assets/queries
 USER ubuntu
 ENV DOCKER_CONFIG="/tmp/.local/docker"
 ENV HOME="/home/ubuntu"
+ENV TFLINT_PLUGIN_DIR=/home/ubuntu/.tflint.d/plugins
 ENV XDG_CACHE_HOME="/tmp/.cache"
 ENV XDG_CONFIG_HOME="/home/ubuntu/.config"
 ENV XDG_DATA_HOME="/tmp/.local/share"
