@@ -41,6 +41,7 @@ RUN \
   bzip2 \
   ca-certificates-java \
   cargo \
+  codespell \
   coreutils \
   cosign \
   curl \
