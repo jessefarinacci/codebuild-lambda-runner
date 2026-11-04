@@ -83,3 +83,8 @@ xx-install-homebrew:
 		--show-error \
 		--silent \
 		--tlsv1.2
+
+.PHONY: xx-update-ubuntu
+xx-update-ubuntu:
+	@echo ">> $(@)"
+	@podman pull public.ecr.aws/docker/library/ubuntu:26.04
