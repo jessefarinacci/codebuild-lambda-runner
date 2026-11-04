@@ -147,6 +147,7 @@ RUN \
   prettier \
   stylua \
   syft \
+  tailwindcss \
   terraform-docs \
   terraform-linters/tap/tflint \
   tfsec \
