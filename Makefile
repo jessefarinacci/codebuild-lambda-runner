@@ -72,8 +72,13 @@ untag-arm64:
 	@-aws ecr batch-delete-image --image-ids imageTag=$(NAME)-arm64 --output json --region us-east-1 --repository-name $(REPONAME)
 	@-aws ecr batch-delete-image --image-ids imageTag=$(NAME)-arm64 --output json --region us-west-2 --repository-name $(REPONAME)
 
-.PHONY: xx-install-homebrew
-xx-install-homebrew:
+.PHONY: xx-update
+xx-update: xx-update-homebrew
+xx-update: xx-update-ubuntu
+	@echo ">> $(@)"
+
+.PHONY: xx-update-homebrew
+xx-update-homebrew:
 	@echo ">> $(@)"
 	@curl \
 		--fail \
