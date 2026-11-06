@@ -1,4 +1,4 @@
-FROM public.ecr.aws/docker/library/ubuntu:26.04
+FROM public.ecr.aws/docker/library/ubuntu:26.10
 
 ARG DEBIAN_FRONTEND="noninteractive"
 
@@ -47,6 +47,7 @@ RUN \
   curl \
   docker-compose-v2 \
   docker.io \
+  dua-cli \
   eza \
   fd-find \
   ffmpeg \
@@ -95,7 +96,7 @@ RUN \
   python3-pip \
   rsync \
   runc \
-  rustc-1.93 \
+  rustc \
   sed \
   software-properties-common \
   sudo \
@@ -132,7 +133,7 @@ RUN \
   && brew install \
   checkov \
   detect-secrets \
-  dua-cli \
+  # dua-cli \
   exiftool \
   # git-remote-codecommit \
   # golang \
