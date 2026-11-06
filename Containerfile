@@ -71,6 +71,7 @@ RUN \
   hunspell-en-us \
   imagemagick \
   jq \
+  lazygit \
   less \
   lua5.5 \
   luarocks \
@@ -104,6 +105,7 @@ RUN \
   tcsh \
   testssl.sh \
   time \
+  tmux \
   tree \
   tzdata \
   webpack \
@@ -133,7 +135,6 @@ RUN \
   && brew install \
   checkov \
   detect-secrets \
-  # dua-cli \
   exiftool \
   # git-remote-codecommit \
   # golang \
@@ -141,6 +142,7 @@ RUN \
   grype \
   hadolint \
   hugo \
+  idoavrah/homebrew/tftui \
   kics \
   license-eye \
   opa \
