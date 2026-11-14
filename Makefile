@@ -77,6 +77,17 @@ xx-update: xx-update-homebrew
 xx-update: xx-update-ubuntu
 	@echo ">> $(@)"
 
+.PHONY: xx-update-detect-secrets
+xx-update-detect-secrets:
+	@echo ">> $(@)"
+	# @rm -f .secrets.baseline
+	# @touch .secrets.baseline
+	# @detect-secrets scan > .secrets.baseline
+	@git ls-files -z | xargs -0 detect-secrets-hook --baseline .secrets.baseline
+	@cat .secrets.baseline | jq --sort-keys > .secrets.baseline.sorted
+	@mv .secrets.baseline.sorted .secrets.baseline
+	@detect-secrets audit .secrets.baseline
+
 .PHONY: xx-update-homebrew
 xx-update-homebrew:
 	@echo ">> $(@)"
